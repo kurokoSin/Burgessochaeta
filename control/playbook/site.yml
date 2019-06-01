@@ -1,0 +1,14 @@
+---
+- hosts: srvs
+  become: yes
+  roles: 
+    - common
+    - git
+    - ntp
+    - ssh
+
+- hosts: local
+  become: yes
+  roles:
+    - common
+    - ntp
