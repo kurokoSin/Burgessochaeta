@@ -1,2 +1,3 @@
 ---
-user: "vagrant"
+user: vagrant
+ansible_sshport: 22

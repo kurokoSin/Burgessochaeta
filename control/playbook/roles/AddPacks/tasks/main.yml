@@ -1,0 +1,5 @@
+---
+- name: install gcc
+  apt: >
+    name=gcc
+    update_cache=yes

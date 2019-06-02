@@ -86,8 +86,14 @@ Vagrant.configure(2) do |config|
     SHELL
 
     control.vm.provision "shell", name: "Setup Ansible", privileged: false, inline: <<-SHELL
+      cp -pR /vagrant/playbook/ ~/playbook/ 
     SHELL
     
+    control.vm.provision "shell", name: "Setup Ansible( root )", inline: <<-SHELL
+      cp -p /vagrant/ansible_conf.sh /etc/profile.d/ansible_conf.sh
+      chmod 0644 /etc/profile.d/ansible_conf.sh
+      chown root:root /etc/profile.d/ansible_conf.sh
+    SHELL
   end
 
 end

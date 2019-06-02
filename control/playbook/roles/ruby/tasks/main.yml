@@ -1,0 +1,50 @@
+---
+- name: rbenv
+  git:
+    repo: https://github.com/sstephenson/rbenv.git
+    dest: /opt/ruby 
+
+- name: rbenv.profile
+  template:
+    src: rbenv_setting.sh.j2
+    dest: /erc/profile.d/rbenv_setting.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ruby-build
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: /opt/ruby/rbenv/plugins/ruby-build
+
+- name: Create Group Deploy
+  group: 
+    name: deploy
+
+- name: Join Group Ansible User
+  user: 
+    name: ansible
+    groups: deploy
+
+- name: Change Permission rbenv directory
+  file:
+    path: /opt/ruby/rbenv
+    owner: root
+    group: deploy
+    recurse: yes
+    state: directory
+
+- name: Install Ruby
+  shell: bash -lc "rbenv install --skip-existing {{ ruby_version }}"
+    - bash -lc "rbenv global {{ ruby_version }}"
+
+- name: Apply Ruby Version
+  shell: bash -lc "rbenv global {{ ruby_version }}"
+
+- name: Install bundler
+  gem:
+    name: bundler
+    user_install: no
+    executable: /opt/ruby/rbenv/shims/gem
+
+
