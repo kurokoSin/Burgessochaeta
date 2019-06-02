@@ -61,7 +61,7 @@ Vagrant.configure(2) do |config|
       
       apt update 
       # expect
-      apt -y install expect
+      apt -y install expect aptitude
       # apt -y install python-pip
       # pip install pexpect
       

@@ -14,6 +14,20 @@
   command: sysctl --load
   when: sysctl_ipv6 is changed
 
+- name: install language-pack
+   apt: name="{{ item }}"
+  environment:
+    DEBIAN_FRONTEND: "noninteractive"
+  with_items:
+    - "language-pack-ja"
+    - "ibus-anthy"
+    - "ibus-mozc"
+  register: install_anguage_pak
+    
+- name: update locale
+  command: update-locale LANG="ja_JP.UTF-8"
+  when: install_language_pack|changed
+
 - name: update localtime
   file: >
     dest="/etc/localtime"
