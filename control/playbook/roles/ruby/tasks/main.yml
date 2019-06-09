@@ -2,12 +2,13 @@
 - name: rbenv
   git:
     repo: https://github.com/sstephenson/rbenv.git
-    dest: /opt/ruby 
+    dest: /opt/ruby
+    force: yes
 
 - name: rbenv.profile
   template:
     src: rbenv_setting.sh.j2
-    dest: /erc/profile.d/rbenv_setting.sh
+    dest: /etc/profile.d/rbenv_setting.sh
     owner: root
     group: root
     mode: 0644
@@ -16,6 +17,7 @@
   git:
     repo: https://github.com/sstephenson/ruby-build.git
     dest: /opt/ruby/rbenv/plugins/ruby-build
+    force: yes
 
 - name: Create Group Deploy
   group: 
@@ -26,20 +28,31 @@
     name: ansible
     groups: deploy
 
-- name: Change Permission rbenv directory
+- name: Join Group Vagrant User
+  user: 
+    name:   vagrant 
+    groups: deploy
+
+- name: Change Permission ruby directory
   file:
-    path: /opt/ruby/rbenv
+    path: /opt/ruby
     owner: root
     group: deploy
     recurse: yes
     state: directory
+    mode: 0775
+
+- name: Install Rubi-Build
+  shell: PREFIX=/opt/ruby /opt/ruby/rbenv/plugins/ruby-build/install.sh
 
 - name: Install Ruby
-  shell: bash -lc "rbenv install --skip-existing {{ ruby_version }}"
-    - bash -lc "rbenv global {{ ruby_version }}"
+  shell: RBENV_DEBUG=yes /opt/ruby/bin/rbenv install --skip-existing {{ ruby_version }}
+  # shell: /bin/bash /home/ansible/.profile && rbenv install --skip-existing {{ ruby_version }}
 
 - name: Apply Ruby Version
-  shell: bash -lc "rbenv global {{ ruby_version }}"
+  shell: /opt/ruby/bin/rbenv global {{ ruby_version }}
+  # args:
+  #   executable: /bin/bash -l
 
 - name: Install bundler
   gem:

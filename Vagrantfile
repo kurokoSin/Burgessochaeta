@@ -18,8 +18,12 @@ Vagrant.configure(2) do |config|
     
     web.vm.provision "shell", inline: <<-SHELL
       # DNS config
-      sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 192.168.122.1/g" /etc/systemd/resolved.conf
+      sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 8.8.4.4/g" /etc/systemd/resolved.conf
       systemctl restart systemd-resolved.service
+      
+      # Package
+      apt update
+      apt install -y aptitude
     SHELL
     
   end
@@ -38,7 +42,7 @@ Vagrant.configure(2) do |config|
 
     control.vm.provision "shell", inline: <<-SHELL
       # DNS config
-      sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 192.168.122.1/g" /etc/systemd/resolved.conf
+      sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 8.8.4.4/g" /etc/systemd/resolved.conf
       systemctl restart systemd-resolved.service
 
       # # Apt Repository Japanese
@@ -70,7 +74,6 @@ Vagrant.configure(2) do |config|
       apt-add-repository --yes --update ppa:ansible/ansible
       apt -y install ansible
       apt -y autoremove
-
     SHELL
 
     control.vm.provision "shell", name: "Setup ssh", privileged: false, inline: <<-SHELL
@@ -82,6 +85,7 @@ Vagrant.configure(2) do |config|
       # ssh-copy-id
       cp -f /vagrant/expect_sendkey.expect ~/expect_sendkey.expect
       chmod 774 ~/expect_sendkey.expect
+      ~/expect_sendkey.expect vagrant@172.16.20.101
       ~/expect_sendkey.expect vagrant@172.16.20.102
     SHELL
 

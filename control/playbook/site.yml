@@ -4,10 +4,6 @@
   vars_files:
     - config.yml
   roles: 
-    - common
-    - git
-    - ntp
-    - ssh
     - ruby
 
 - hosts: local
@@ -15,3 +11,15 @@
   roles:
     - common
     - ntp
+
+- hosts: srvs
+  become: yes
+  vars_files:
+    - config.yml
+  roles: 
+    - common
+    - git
+    - ntp
+    - ruby
+
+

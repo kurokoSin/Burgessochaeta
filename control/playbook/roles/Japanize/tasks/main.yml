@@ -1,0 +1,21 @@
+---
+- name: install language-pack
+  apt: 
+    name: ['language-pack-ja', 'ibus-anthy', 'ibus-mozc']
+  environment:
+    DEBIAN_FRONTEND: "noninteractive"
+  register: install_language_pack
+    
+- name: update locale
+  command: update-locale LANG="ja_JP.UTF-8"
+  when: install_language_pack is changed
+
+- name: update localtime
+  file: 
+    dest: "/etc/localtime"
+    src: "/usr/share/zoneinfo/Asia/Tokyo"
+    state: link
+    owner: root
+    group: root
+    force: yes
+
