@@ -1,11 +1,4 @@
 ---
-- hosts: srvs
-  become: yes
-  vars_files:
-    - config.yml
-  roles: 
-    - ruby
-
 - hosts: local
   become: yes
   roles:
@@ -20,6 +13,8 @@
     - common
     - git
     - ntp
+    - AddPacks
+    - rbenv
     - ruby
 
 

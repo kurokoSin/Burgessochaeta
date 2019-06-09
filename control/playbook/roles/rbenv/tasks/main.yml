@@ -1,0 +1,44 @@
+---
+- name: rbenv
+  git:
+    repo: https://github.com/sstephenson/rbenv.git
+    dest: /opt/ruby
+    force: yes
+
+- name: rbenv.profile
+  template:
+    src: rbenv_setting.sh.j2
+    dest: /etc/profile.d/rbenv_setting.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ruby-build
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: /opt/ruby/rbenv/plugins/ruby-build
+    force: yes
+
+- name: Create Group Deploy
+  group: 
+    name: deploy
+
+- name: Join Group Ansible User
+  user: 
+    name: ansible
+    groups: deploy
+
+- name: Join Group Vagrant User
+  user: 
+    name:   vagrant 
+    groups: deploy
+
+- name: Change Permission ruby directory
+  file:
+    path: /opt/ruby
+    owner: root
+    group: deploy
+    recurse: yes
+    state: directory
+    mode: 0775
+
