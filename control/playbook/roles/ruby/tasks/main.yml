@@ -2,7 +2,14 @@
 # - name: Install Rubi-Build
 #   shell: PREFIX=/opt/ruby /opt/ruby/rbenv/plugins/ruby-build/install.sh
 
+- name: Install Ruby-build
+  poll: 30
+  async: 10800
+  shell: bash -lc "PREFIX=/opt/ruby /opt/ruby/rbenv/plugins/ruby-build/install.sh"
+
 - name: Install Ruby
+  poll: 30
+  async: 10800
   shell: bash -lc "BASH_ENV=/etc/profile rbenv install --skip-existing {{ ruby_version }}"
   # shell: /bin/bash /home/ansible/.profile && rbenv install --skip-existing {{ ruby_version }}
 
