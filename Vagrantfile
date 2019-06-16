@@ -1,7 +1,4 @@
 Vagrant.configure(2) do |config|
-  # Config 
-  # config.ssh.guest_port = 10022
-  # config.ssh.keys_only = yes
   
   # web-VM
   config.vm.define "web" do |web|
@@ -45,29 +42,8 @@ Vagrant.configure(2) do |config|
       sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 8.8.4.4/g" /etc/systemd/resolved.conf
       systemctl restart systemd-resolved.service
 
-      # # Apt Repository Japanese
-      # cd /tmp
-      # wget -nv https://www.ubuntulinux.jp/ubuntu-ja-archive-keyring.gpg
-      # apt-key add /tmp/ubuntu-ja-archive-keyring.gpg
-      # 
-      # cd /tmp
-      # wget -nv https://www.ubuntulinux.jp/ubuntu-jp-ppa-keyring.gpg
-      # apt-key add /tmp/ubuntu-jp-ppa-keyring.gpg
-      # 
-      # mkdir -p /etc/apt/sources.list.d
-      # cd /etc/apt/sources.list.d
-      # wget -nv https://www.ubuntulinux.jp/sources.list.d/bionic.list
-      # mv bionic.list ubuntu-ja.list
-      # 
-      # export DEBIAN_FRONTEND=noninteractive
-      # apt -y update
-      # apt -y install ubuntu-defaults-ja
-      
       apt update 
-      # expect
       apt -y install expect aptitude
-      # apt -y install python-pip
-      # pip install pexpect
       
       # ansible 
       apt -y install software-properties-common
