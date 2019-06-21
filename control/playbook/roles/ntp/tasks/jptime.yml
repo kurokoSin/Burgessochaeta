@@ -1,0 +1,9 @@
+- name: update localtime
+  file: 
+    dest: "/etc/localtime"
+    src: "/usr/share/zoneinfo/Asia/Tokyo"
+    state: link
+    owner: root
+    group: root
+    force: yes
+

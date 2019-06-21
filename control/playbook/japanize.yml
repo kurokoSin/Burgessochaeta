@@ -1,0 +1,5 @@
+---
+- hosts: srvs
+  become: yes
+  roles:
+    - Japanize
