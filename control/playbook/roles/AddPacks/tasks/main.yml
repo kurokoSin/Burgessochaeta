@@ -1,5 +1,5 @@
 ---
 - name: install Packages for Ruby & Nokogiri
   apt: 
-    name: ['gcc', 'make', 'libssl-dev','libreadline-dev','zlib1g-dev','build-essential','patch','ruby-dev','liblzma-dev']
+    name: ['gcc', 'make', 'libssl-dev', 'libreadline-dev', 'zlib1g-dev', 'build-essential', 'patch', 'ruby-dev', 'liblzma-dev' ,'ruby-sqlite3', 'libsqlite3-dev']
     update_cache: yes
