@@ -33,3 +33,10 @@
     user_install: no
     executable: /opt/ruby/shims/gem
 
+- name: Install Basic Gems (pry-rails)
+  gem:
+    name: pry-rails
+    user_install: no
+    executable: /opt/ruby/shims/gem
+
+

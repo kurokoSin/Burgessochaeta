@@ -1,5 +1,30 @@
 Vagrant.configure(2) do |config|
   
+  # dev-VM
+  config.vm.define "dev" do |dev|
+    dev.vm.box = "generic/ubuntu1804"
+    dev.vm.hostname = "ansible-dev"
+    dev.vm.network "private_network", ip: "172.16.20.103"
+    dev.vm.network :forwarded_port, guest: 80, host: 8000, id: "http"
+    dev.vm.synced_folder './dev/', '/vagrant', type: '9p', :mount_options => ['dmode=775', 'fmode=664']
+
+    dev.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 2
+    end
+    
+    dev.vm.provision "shell", inline: <<-SHELL
+      # DNS config
+      sed -i.bak -e "s/^DNS=.*$/DNS=8.8.8.8 8.8.4.4/g" /etc/systemd/resolved.conf
+      systemctl restart systemd-resolved.service
+      
+      # Package
+      apt update
+      apt install -y aptitude
+    SHELL
+    
+  end
+
   # web-VM
   config.vm.define "web" do |web|
     web.vm.box = "generic/ubuntu1804"
@@ -63,6 +88,7 @@ Vagrant.configure(2) do |config|
       chmod 774 ~/expect_sendkey.expect
       ~/expect_sendkey.expect vagrant@172.16.20.101
       ~/expect_sendkey.expect vagrant@172.16.20.102
+      ~/expect_sendkey.expect vagrant@172.16.20.103
     SHELL
 
     control.vm.provision "shell", name: "Setup Ansible", privileged: false, inline: <<-SHELL
